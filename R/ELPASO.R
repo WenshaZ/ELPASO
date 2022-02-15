@@ -24,7 +24,7 @@ forward_selection = function(tree,Y,seq,increasing = TRUE,criterion = c('BIC','p
     min.score = get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),NULL,opt)$score
     for(i in 1:maxShifts){
       model =  tryCatch(get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),v_rank[1:i],opt) ,error = function(e) NA)
-      if(is.na(model)){
+      if(anyNA(model)){
         break
       }
       else{
@@ -46,7 +46,7 @@ forward_selection = function(tree,Y,seq,increasing = TRUE,criterion = c('BIC','p
     min.score = get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),NULL,opt)$score
     for(i in 1:maxShifts){
      model =  tryCatch(get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),c(s.c,v_rank[i]),opt) ,error = function(e) NA)
-     if(is.na(model)){
+     if(anyNA(model)){
       next
      }
      else{
@@ -93,7 +93,7 @@ backward_selection = function(tree,Y,seq,increasing = TRUE,criterion = c('BIC','
       for(i in maxShifts:0){
          the.sc = if (i>0) v_rank[1:i] else  NULL
           model =  tryCatch(get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),the.sc,opt),error = function(e) NA)
-          if(is.na(model)){
+          if(anyNA(model)){
             next
           } else{
             score = model$score
@@ -116,7 +116,7 @@ backward_selection = function(tree,Y,seq,increasing = TRUE,criterion = c('BIC','
       for(i in maxShifts:1){
           the.sc = setdiff(s.c,v_rank[i])
           model = tryCatch(get(paste('cmp_',criterion,sep = ''))(tree,as.matrix(Y),the.sc,opt),error = function(e) NA)
-          if(is.na(model)){
+          if(anyNA(model)){
             
             s.c = the.sc
             next
@@ -218,6 +218,7 @@ forward_backward_selection = function(tree,Y,seq,increasing = TRUE,criterions,st
 ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples = 200, xtype=c('simpX','orgX'), penalty = c('LASSO','SCAD'),ensemble_method = "quantile", q = 0.25 ){
   
   X = l1ou:::generate_design_matrix(tree,type='simpX')
+  names(Y) = tree$tip.label
 
   criterion =  match.arg(criterion)
   xtype = match.arg(xtype)
@@ -229,6 +230,8 @@ ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples 
   alpha_list = c()
   sigam2_list = c()
 
+  print(model.frame(formula='Y~1',data=list()))
+  print(tree)
   bmod = phylolm(Y~1,phy=tree,model='BM')
   rank_seqs = get_ranking_seqs(tree,Y,nsamples = nsamples,size = 0.8*length(Y),replace = FALSE,alpha = 0,sigma2 = bmod$sigma2,sigma2_error = 0,xtype = xtype,penalty = penalty)
 
