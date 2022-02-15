@@ -216,6 +216,9 @@ forward_backward_selection = function(tree,Y,seq,increasing = TRUE,criterions,st
 
 
 ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples = 200, xtype=c('simpX','orgX'), penalty = c('LASSO','SCAD'),ensemble_method = "quantile", q = 0.25 ){
+  
+  X = l1ou:::generate_design_matrix(tree,type='simpX')
+
   criterion =  match.arg(criterion)
   xtype = match.arg(xtype)
   penalty = match.arg(penalty)
@@ -253,6 +256,7 @@ ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples 
 
   sc_list = c(sc_list, if(length(sv)>0) paste(sort(sv),collapse = ',') else '')
   score_list = c(score_list, selection_res$score)
+
 
   lmod = if(length(sv)>0) phylolm(Y~X[,sv],phy=tree,model='OUfixedRoot') else phylolm(Y~1,phy=tree,model='OUfixedRoot')
   alpha_list = c(alpha_list, lmod$optpar)

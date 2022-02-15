@@ -50,11 +50,12 @@ get_ranking_seqs = function(tree,Y,nsamples,size,replace=FALSE,alpha,sigma2,sigm
       lambda = setupLambda(X_sample, Y_sample, family='gaussian', alpha=1, lambda.min=0.001, nlambda=100, penalty.factor=rep(1,ncol(X)))
       lasso = glmnet(as.matrix(X_sample), as.vector(Y_sample),
                      family='gaussian',intercept = FALSE,standaraize=FALSE)
+
       scad = ncvreg(X_sample,Y_sample,
                     family='gaussian',penalty='SCAD',normalize=FALSE,lambda = lambda)
 
       if(penalty=='LASSO'){
-        the_rank = rank(-rowSums(lasso$beta[1:(nrow(lasso$beta)),]!=0))
+        the_rank = rank(-rowSums(as.matrix(lasso$beta[1:(nrow(lasso$beta)),]!=0)))
       }else{
         the_rank = rank(-rowSums(scad$beta[2:(nrow(scad$beta)),]!=0))
       }
@@ -73,6 +74,8 @@ get_ranking_seqs = function(tree,Y,nsamples,size,replace=FALSE,alpha,sigma2,sigm
 #' @param q Required only when method is "quantile", specify the quantile value
 #' @return A vector (length is number of potential shift postions). The ensembled ranking sequence
 #' @export
+#' @importFrom psych geometric.mean
+
 combine_ranking_seqs = function(rank_seqs,method = "quantile",q=0.25){
  if(method == "min"){
    cseq = apply(rank_seqs,2,min)
