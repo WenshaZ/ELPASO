@@ -12,19 +12,19 @@
 #' @param penalty Penalty function to be applied. Either "LASSO"(default) or "SCAD"
 #' @return A matrix, each row is a ranking sequence of variables, each column represents the rank sets of each variable
 #' @export 
-#' @import glmnet
-#' @import ncvreg
+#' @importFrom glmnet glmnet
+#' @importFrom ncvreg ncvreg setupLambda
 #' @import l1ou
-#' @import PIGShift
+#' @importFrom PIGShift OU.vcv
 
 get_ranking_seqs = function(tree,Y,nsamples,size,replace=FALSE,alpha,sigma2,sigma2_error=0,xtype=c('simpX','orgX'), penalty = c('LASSO','SCAD')){
   #xtype = match.arg(xtype)
   #penalty = match.arg(penalty)
 
   if(alpha==0|xtype=='simpX'){
-    X = l1ou:::generate_design_matrix(tree,type='simpX')
+    X = generate_design_matrix(tree,type='simpX')
   }else{
-    X = l1ou:::generate_design_matrix(tree,type='orgX',alpha)
+    X = generate_design_matrix(tree,type='orgX',alpha)
   }
 
   seqs = X[0,]
@@ -91,3 +91,4 @@ combine_ranking_seqs = function(rank_seqs,method = "quantile",q=0.25){
  return(cseq)
 }
 
+generate_design_matrix = l1ou:::generate_design_matrix

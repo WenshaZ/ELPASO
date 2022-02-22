@@ -217,7 +217,7 @@ forward_backward_selection = function(tree,Y,seq,increasing = TRUE,criterions,st
 
 ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples = 200, xtype=c('simpX','orgX'), penalty = c('LASSO','SCAD'),ensemble_method = "quantile", q = 0.25 ){
   
-  X = l1ou:::generate_design_matrix(tree,type='simpX')
+  X = generate_design_matrix(tree,type='simpX')
   names(Y) = tree$tip.label
 
   criterion =  match.arg(criterion)
@@ -240,8 +240,8 @@ ELPASO = function(tree, Y, criterion = c('BIC','pBIC'), maxShifts = 20,nsamples 
 
   opt = list()
   opt$multivariate.missing = FALSE
-  opt$Z = l1ou:::generate_design_matrix(tree,type='simpX')
-  opt$alpha.upper.bound = l1ou:::alpha_upper_bound(tree)
+  opt$Z = generate_design_matrix(tree,type='simpX')
+  opt$alpha.upper.bound = alpha_upper_bound(tree)
   opt$quietly = FALSE
   opt$root.model = "OUfixedRoot"
   opt$alpha.lower.bound = NA
@@ -321,3 +321,5 @@ cmp_pBIC = l1ou:::cmp_pBIC
 cmp_pBICess = l1ou:::cmp_pBICess
 cmp_AICc = l1ou:::cmp_AICc
 cmp_mBIC = l1ou:::cmp_mBIC
+generate_design_matrix = l1ou:::generate_design_matrix
+alpha_upper_bound = l1ou:::alpha_upper_bound
