@@ -3,8 +3,10 @@ An R package using ensemble variable selection method to analyze phylogenetic ev
 
 To install ELPASO from Github, please use
 
+```
 devtools::install_github("wenshaz/ELPASO")
-
+```
 or
-
+```
 devtools::install_github("wenshaz/ELPASO@main")
+```
