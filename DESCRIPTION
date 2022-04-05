@@ -2,7 +2,7 @@ Package: ELPASO
 Type: Package
 Title: Ensemble LASSO for Phylogenetic Analysis of Shifts with OU
 Version: 0.1.0
-Author: Wensha Zhang [aut], Tobias Kenney [ctb], Lam Si Tung Ho [ctb]
+Author: Wensha Zhang [aut], Tobias Kenney [aut], Lam Si Tung Ho [aut]
 Maintainer: Wensha Zhang <wn209685@dal.ca>
 Description: Provides tool functions for phylognetic analysis of evolutionary shifts. It uses OU process and ensemble LASSO model to detect the incontinuous changes along during the evolution process. 
 License: GPL (>= 3)
